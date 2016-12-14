@@ -14,11 +14,20 @@ function serialize(data, outputFormat) {
       })
     } else if(typeof entry === 'object'){
       console.log('Is object');
-      for(var key in entry) {
-        console.log(typeof entry[key]);
-      }
+      itemIsObject(entry);
     }
   })
+
+  function itemIsObject(item) {
+    for(var key in item) {
+      var childItem = item[key];
+      console.log('  '+typeof childItem);
+      if(typeof childItem === 'object') {
+        console.log('me!');
+        itemIsObject(childItem);
+      }
+    }
+  }
 }
 
 serialize(data, 'HTML');
