@@ -7,6 +7,8 @@ function serialize(data, outputFormat) {
     return JSON.stringify(data);
   }
 
+  var html = '';
+
   data.forEach(function(entry) {
     if(Array.isArray(entry)) {
       itemIsArray(entry);
@@ -16,36 +18,41 @@ function serialize(data, outputFormat) {
   })
 
   function itemIsObject(item) {
-    var html = '<dl>';
+    html += '\n<dl>';
     for(var key in item) {
       var childItem = item[key];
       html+='\n<dt>'+key+'</dt>';
-      html+='\n<dd>'+childItem+'</dd>';
       // console.log(html);
       if(Array.isArray(childItem)) {
+        console.log('child array');
         itemIsArray(childItem);
       } else if(typeof childItem === 'object') {
+        console.log('child object');
         itemIsObject(childItem);
+      } else {
+        html+='\n<dd>'+childItem+'</dd>';
       }
     }
-    html += '</dd>';
-    return console.log(html);
+    html += '\n</dl>';
+    // return console.log(html);
   }
 
   function itemIsArray(item) {
-    var html = '<ul>';
+    html += '\n<ul>';
     item.forEach(function(item, i) {
       // console.log(html);
-      html += '\n<li>'+item+'</li>';
       if(Array.isArray(item)) {
         return itemIsArray(item);
       } else if(typeof item === 'object') {
         itemIsObject(item);
+      } else {
+        html += '\n<li>'+item+'</li>';
       }
     })
     html+= '\n</ul>'
-    return console.log(html);
   }
+
+  return console.log(html);
 }
 
 serialize(data, 'HTML');
